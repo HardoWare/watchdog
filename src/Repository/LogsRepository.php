@@ -20,7 +20,7 @@ class LogsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Logs::class);
     }
-    public function findNowszeNiżIOStatusieError(): array
+    public function findNowszeNizIOStatusieError(): array
     {
         $qb = $this->createQueryBuilder('l')
             ->andWhere('l.status = :status')
@@ -29,7 +29,7 @@ class LogsRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
         return $query->execute();
     }
-    public function setStatusWysłano($id): void
+    public function setStatusWyslano($id): void
     {
         $qb = $this->createQueryBuilder('l')
             ->update()
@@ -56,7 +56,7 @@ class LogsRepository extends ServiceEntityRepository
         return ($isThere) ? true : false;
     }
 
-    public function findWiększeNiżIdIStatusieError($id): array
+    public function findWiekszeNizIdIStatusieError($id): array
     {
         $qb = $this->createQueryBuilder('l')
             ->andWhere('l.status = :status')

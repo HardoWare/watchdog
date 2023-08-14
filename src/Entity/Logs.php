@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\LogsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: LogsRepository::class)]
 class Logs

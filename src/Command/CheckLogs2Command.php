@@ -10,9 +10,10 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 #[AsCommand(
     name: 'app:check-logs-2',
@@ -20,10 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 )]
 class CheckLogs2Command extends Command
 {
-    public function __construct(private LogsRepository $logsRepository,
-                                private HttpClientInterface $httpClient,
-                                private Request $request,
-                                private Response $response,
+    public function __construct(private readonly LogsRepository      $logsRepository,
+                                private readonly HttpClientInterface $httpClient,
     )
     {
         parent::__construct();
@@ -36,13 +35,13 @@ class CheckLogs2Command extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $id = $this->zwrocIdOstatniegoPrzetworzonegoRekorduZBazy();
-        $logs = $this->logsRepository->findWiększeNiżIdIStatusieError($id);
+        $logs = $this->logsRepository->findWiekszeNizIdIStatusieError($id);
 
         if(count($logs) === 0) {
+            // request
             $io->success("Brak logów do przesłania");
             return Command::SUCCESS;
         }
-
 
 
         $logs = $this->usunWyslaneLogi($logs);
@@ -74,8 +73,8 @@ class CheckLogs2Command extends Command
         $today = new DateTime("today");
         $i = 0;
         foreach($logs as $log) {
-            $czyZgłoszony = $this->logsRepository->findCzyLogWystepujeDzis($today, $log->getMessage(), $log->getId());
-            if($czyZgłoszony) {
+            $czyZgloszony = $this->logsRepository->findCzyLogWystepujeDzis($today, $log->getMessage(), $log->getId());
+            if($czyZgloszony) {
                 unset($logs[$i]);
             }
             $i++;
@@ -97,11 +96,25 @@ class CheckLogs2Command extends Command
 
     private function wyslijRequest($logs): bool
     {
-        $token = "yOJ9KvRtQrTUaCPyRc22OJPMSmIrub9PUzMFUZEHMgXcd1fRWP7pBfosdSDFLzOF";
-        $req = new Request()
-        $response = $this->httpClient->request('POST', 'http://localhost:8000/', ['head' => ['token' => $token], 'body' => [$logs]]);
-        $op = $response->getInfo();
-        return ($response->getStatusCode() == 200) ? true : false;
+        $hostName = "HOST_0";
+        $hostToken = "0_uni64d4ba2273871";
+        $cuki = "XDEBUG_SESSION=PHPSTORM";
+        $arr = [];
+        foreach ($logs as $log) {
+            $arr[] = ['id' => $log->getId(), 'time_stamp' => $log->getTimeStamp(), 'status' => $log->getStatus(), 'message' => $log->getMessage()];
+        }
+
+        $response = $this->httpClient->request('POST','http://localhost:9900/', [
+            'headers' => [
+                'REMOTE_HOST_NAME'      => $hostName,
+                'REMOTE_HOST_TOKEN'     => $hostToken,
+                'Content-Type'          => 'application/json',
+                'Cookie'                => $cuki,
+            ],
+            'json' => $arr
+        ]);
+
+        return $response->getStatusCode() === 200;
     }
     
     private function zaktualizujIdOstatniegoPrzetworzonegoRekorduZBazy($logs): void
@@ -118,3 +131,16 @@ class CheckLogs2Command extends Command
     "status":"1",
     "logi":"~body"
 }   */
+
+/*
+ * {
+        "id": 10,
+        "time_stamp": {
+            "date": "2023-08-09 13:17:59.000000",
+            "timezone_type": 3,
+            "timezone": "Europe\/Berlin"
+        },
+        "status": 1,
+        "message": "67"
+    }
+ */

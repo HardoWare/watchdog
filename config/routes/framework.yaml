@@ -1,3 +1,10 @@
+#framework:
+#    http_client:
+#        default_options:
+#            headers:
+#                'REMOTE_HOST_NAME': 'HOST_0'
+#                'REMOTE_HOST_TOKEN': '0_uni64d4ba2273871'
+
 when@dev:
     _errors:
         resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
