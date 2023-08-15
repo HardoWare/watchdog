@@ -125,22 +125,53 @@ class CheckLogs2Command extends Command
     }
     
 }
-/* {
-    "data_wyslania":"2023-12-24 11:50:13",
-    "token":"987654321",
-    "status":"1",
-    "logi":"~body"
-}   */
-
 /*
- * {
-        "id": 10,
-        "time_stamp": {
-            "date": "2023-08-09 13:17:59.000000",
-            "timezone_type": 3,
-            "timezone": "Europe\/Berlin"
-        },
-        "status": 1,
-        "message": "67"
-    }
+    json
+[{
+	"id": 2,
+	"time_stamp": {
+		"date": "2023-08-15 17:35:36.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Berlin"
+	},
+	"status": 1,
+	"message": "86"
+}, {
+	"id": 4,
+	"time_stamp": {
+		"date": "2023-08-15 17:35:36.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Berlin"
+	},
+	"status": 1,
+	"message": "84"
+}, {
+	"id": 6,
+	"time_stamp": {
+		"date": "2023-08-15 17:35:36.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Berlin"
+	},
+	"status": 1,
+	"message": "27"
+}, {
+	"id": 8,
+	"time_stamp": {
+		"date": "2023-08-15 17:35:36.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Berlin"
+	},
+	"status": 1,
+	"message": "47"
+}, {
+	"id": 10,
+	"time_stamp": {
+		"date": "2023-08-15 17:35:36.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Berlin"
+	},
+	"status": 1,
+	"message": "61"
+}]
+
  */
