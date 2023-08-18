@@ -104,10 +104,9 @@ class CheckLogs2Command extends Command
             $arr[] = ['id' => $log->getId(), 'time_stamp' => $log->getTimeStamp(), 'status' => $log->getStatus(), 'message' => $log->getMessage()];
         }
 
-        $response = $this->httpClient->request('POST','http://localhost:9900/', [
+        $response = $this->httpClient->request('POST',"http://localhost:9900/api/{$hostName}", [
             'headers' => [
-                'REMOTE_HOST_NAME'      => $hostName,
-                'REMOTE_HOST_TOKEN'     => $hostToken,
+                'X-REMOTE-HOST'         => $hostToken,
                 'Content-Type'          => 'application/json',
                 'Cookie'                => $cuki,
             ],
